@@ -38,3 +38,11 @@ def make_empty_label(text: str) -> QLabel:
     label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     label.setWordWrap(True)
     return label
+
+
+class CardFrame(QFrame):
+    def __init__(
+        self, parent: QWidget | None = None, object_name: str = "cardFrame"
+    ) -> None:
+        super().__init__(parent)
+        self.setObjectName(object_name)
