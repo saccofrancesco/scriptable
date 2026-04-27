@@ -60,3 +60,20 @@ class ColorSwatch(QFrame):
         self.setStyleSheet(
             f"background: {color_hex}; border-radius: {max(self._size // 2, 1)}px"
         )
+
+
+class WeekdaySelector(QWidget):
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        layout: QHBoxLayout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        self._buttons: list[QToolButton] = list()
+        for index in range(7):
+            button: QToolButton = QToolButton(self)
+            button.setCheckable(True)
+            button.setObjectName("workdayButton")
+            button.setText(weekday_abbrev(index))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            layout.addWidget(button)
+            self._buttons.append(button)
