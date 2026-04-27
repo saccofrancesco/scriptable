@@ -38,3 +38,8 @@ def contrast_text_color(color_hex: str) -> str:
     blue: int = int(value[4:6], 16)
     luminance: float = 0.299 * red + 0.587 * green + 0.114 * blue
     return "#ffffff" if luminance < 140 else "#111827"
+
+
+def weekday_abbrev(index: int) -> str:
+    labels: tuple[str] = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    return labels[index]
