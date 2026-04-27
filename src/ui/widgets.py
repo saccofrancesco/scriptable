@@ -55,3 +55,8 @@ class ColorSwatch(QFrame):
         self.setFixedSize(size, size)
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
         self.setColor("#2563eb")
+
+    def set_color(self, color_hex: str) -> None:
+        self.setStyleSheet(
+            f"background: {color_hex}; border-radius: {max(self._size // 2, 1)}px"
+        )
