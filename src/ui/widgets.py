@@ -30,3 +30,11 @@ def clear_layout(layout) -> None:
         child_layout = item.layout()
         if child_layout is not None:
             clear_layout(child_layout)
+
+
+def make_empty_label(text: str) -> QLabel:
+    label: QLabel = QLabel(text)
+    label.setObjectName("emptyState")
+    label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    label.setWordWrap(True)
+    return label
