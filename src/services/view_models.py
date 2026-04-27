@@ -21,3 +21,15 @@ class ShiftRowVM:
     start_time: time
     end_time: time
     duration_hours: float
+
+
+@dataclass(frozen=True, slots=True)
+class CalendarDayVM:
+    date: date
+    in_current_month: bool
+    is_today: bool
+    is_selected: bool
+    day_number: int
+    employee_colors: tuple[str, ...]
+    overflow_count: int
+    tooltip: str
