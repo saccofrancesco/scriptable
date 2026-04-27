@@ -20,3 +20,12 @@ class Employee:
     @property
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}".strip()
+
+
+@dataclass(slots=True)
+class Shift:
+    employee_id: str
+    shift_date: date
+    start_time: time
+    end_time: time
+    id: str = field(default_factory=_new_id)
