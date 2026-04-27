@@ -27,3 +27,14 @@ def format_hours(value: float, decimals: int = 2) -> str:
     if text == "-0":
         text = "0"
     return f"{text} h"
+
+
+def contrast_text_color(color_hex: str) -> str:
+    value: str = color_hex.lstrip("#")
+    if len(value) != 6:
+        return "#111827"
+    red: int = int(value[0:2], 16)
+    green: int = int(value[2:4], 16)
+    blue: int = int(value[4:6], 16)
+    luminance: float = 0.299 * red + 0.587 * green + 0.114 * blue
+    return "#ffffff" if luminance < 140 else "#111827"
