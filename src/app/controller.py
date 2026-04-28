@@ -85,3 +85,20 @@ class WorkshiftController(QObject):
 
     def get_shift(self, shift_id: str) -> Shift:
         return require_shift(self.schedule, shift_id)
+
+    def set_selected_day(self, selected_day: date) -> None:
+        self.view_state.selected_day = selected_day
+        self.view_state.selected_month = selected_day.replace(day=1)
+        self.changed.emit()
+
+    def move_month(self, delta: int) -> None:
+        next_day: date = add_months(self.selected_day, delta)
+        self.view_state.selected_day = next_day
+        self.view_state.selected_month = next_day.replace(day=1)
+        self.changed.emit()
+
+    def go_today(self) -> None:
+        today: date = date.today()
+        self.view_state.selected_day = today
+        self.view_state.selected_month = today.replace(day=1)
+        self.changed.emit()
