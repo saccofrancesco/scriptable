@@ -89,3 +89,50 @@ class WeekdaySelector(QWidget):
         normalized: set[int] = set(days)
         for index, button in enumerate(self._buttons):
             button.setChecked(index in normalized)
+
+
+class EmployeeRowWidget(CardFrame):
+    edit_requested: pyqtSignal[str] = pyqtSignal(str)
+    delete_requested: pyqtSignal[str] = pyqtSignal(str)
+
+    def __init__(
+        self, employee: EmployeeListItemVM, parent: QWidget | None = None
+    ) -> None:
+        super().__init__(parent)
+        self.employee_id = employee.id
+        layout: QHBoxLayout = QHBoxLayout(self)
+        layout.setContentsMargins(12, 10, 12, 10)
+        layout.setSpacing(8)
+
+        self._swatch: ColorSwatch = ColorSwatch(12, self)
+        self._swatch.set_color(employee.color_hex)
+
+        text_box: QVBoxLayout = QVBoxLayout()
+        text_box.setSpacing(2)
+
+        self._name_label: QLabel = QLabel(employee.full_name, self)
+        self._name_label.setObjectName("rowTitle")
+        self._meta_label: QLabel = QLabel(
+            f"{format_hours(employee.weekly_target_hours)} / week", self
+        )
+        self._meta_label.setObjectName("rowMeta")
+
+        text_box.addWidget(self._name_label)
+        text_box.addWidget(self._meta_label)
+
+        self._edit_button = QPushButton("Edit", self)
+        self._edit_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._edit_button.clicked.connect(
+            lambda _=False: self.edit_requested.emit(self.employee_id)
+        )
+        self._delete_button = QPushButton("Delete", self)
+        self._delete_button.setObjectName("dangerButton")
+        self._delete_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._delete_button.clicked.connect(
+            lambda _=False: self.delete_requested.emit(self.employee_id)
+        )
+
+        layout.addWidget(self._swatch)
+        layout.addLayout(text_box, 1)
+        layout.addWidget(self._edit_button)
+        layout.addWidget(self._delete_button)
