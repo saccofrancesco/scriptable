@@ -84,6 +84,11 @@ class WeekdaySelector(QWidget):
 
     selection_changed: pyqtSignal = pyqtSignal()
 
+    def selected_days(self) -> tuple[int, ...]:
+        return tuple(
+            index for index, button in enumerate(self._buttons) if button.isChecked()
+        )
+
     def set_selected_days(self, days: tuple[int, ...] | list[int]) -> None:
         normalized: set[int] = set(days)
         for index, button in enumerate(self._buttons):
