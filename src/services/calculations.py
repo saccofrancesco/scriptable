@@ -34,3 +34,9 @@ def employee_display_rows(schedule: Schedule) -> list[EmployeeListItemVM]:
         )
         for employee in schedule.employees
     ]
+
+
+def shift_duration_hours(shift: Shift) -> float:
+    start: datetime = datetime.combine(shift.shift_date, shift.start_time)
+    end: datetime = datetime.combine(shift.shift_date, shift.end_time)
+    return (end - start).total_seconds() / 3600
