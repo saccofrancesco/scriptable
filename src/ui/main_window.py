@@ -105,3 +105,23 @@ class MainWindow(QMainWindow):
             self.controller.edit_employee(employee_id, **dialog.get_values())
         except WorkshiftError as exc:
             self._show_error("Cannot edit person", str(exc))
+
+    def _delete_employee(self, employee_id: str) -> None:
+        try:
+            employee: Employee = self.controller.get_employee(employee_id)
+        except WorkshiftError as exc:
+            self._show_error("Cannot delete person", str(exc))
+            return
+        removed_shifts: int = self.controller.count_employee_shifts(employee_id)
+        message: str = f"Delete {employee.full_name}?"
+        if removed_shifts:
+            message += f"\nThis will also remove {removed_shifts} shift(s)."
+        dialog: DeleteConfirmDialog = DeleteConfirmDialog(
+            "Delete person", message, parent=self
+        )
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+        try:
+            self.controller.delete_employee(employee_id)
+        except WorkshiftError as exc:
+            self._show_error("Cannot delete person", str(exc))
