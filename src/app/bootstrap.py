@@ -3,22 +3,24 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from ..ui.theme import apply_theme
 from ..ui.main_window import MainWindow
+from .controller import WorkshiftController
 
 
 def create_application(
     argv: list[str] | None = None,
-) -> tuple[QApplication, MainWindow]:
+) -> tuple[QApplication, WorkshiftController, MainWindow]:
     app: QApplication = QApplication(argv or sys.argv)
     app.setApplicationName("Workshift")
     app.setOrganizationName("Workshift")
     app.setOrganizationDomain("local")
     app.setStyle("Fusion")
     apply_theme(app)
-    window: MainWindow = MainWindow()
-    return app, window
+    controller: WorkshiftController = WorkshiftController()
+    window: MainWindow = MainWindow(controller)
+    return app, controller, window
 
 
 def main(argv: list[str] | None = None) -> int:
-    app, window = create_application(argv)
+    app, _, window = create_application(argv)
     window.show()
     return app.exec()
