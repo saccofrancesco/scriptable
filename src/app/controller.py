@@ -209,3 +209,10 @@ class WorkshiftController(QObject):
         shift.end_time = end_time
         self.changed.emit()
         return shift
+
+    def delete_shift(self, shift_id: str) -> None:
+        require_shift(self.schedule, shift_id)
+        self.schedule.shifts = [
+            shift for shift in self.schedule.shifts if shift.id != shift_id
+        ]
+        self.changed.emit()
