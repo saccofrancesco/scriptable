@@ -120,3 +120,8 @@ class EmployeeDialog(QDialog):
         self._weekly_target.setValue(employee.weekly_target_hours)
         self._weekday_selector.set_selected_days(employee.workdays)
         self._set_color(employee.color_hex)
+
+    def _set_color(self, color_hex: str) -> None:
+        self._color_hex: str = color_hex.lower()
+        self._color_swatch.set_color(self._color_hex)
+        self._color_label.setText(self._color_hex)
