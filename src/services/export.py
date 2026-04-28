@@ -59,3 +59,8 @@ def _set_page_setup(sheet) -> None:
     sheet.page_margins.top = 0.4
     sheet.page_margins.bottom = 0.4
     sheet.sheet_view.showGridLines = False
+
+
+def _set_widths(sheet, widths: dict[str, float]) -> None:
+    for column, width in widths.items():
+        sheet.column_dimensions[column].width = width
