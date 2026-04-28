@@ -165,3 +165,25 @@ class MainWindow(QMainWindow):
             self.controller.edit_shift(shift_id, **dialog.get_values())
         except WorkshiftError as exc:
             self._show_error("Cannot edit shift", str(exc))
+
+    def _delete_shift(self, shift_id: str) -> None:
+        try:
+            shift: Shift = self.controller.get_shift(shift_id)
+        except WorkshiftError as exc:
+            self._show_error("Cannot delete shift", str(exc))
+            return
+        employee: Employee = self.controller.get_employee(shift.employee_id)
+        message: str = (
+            f"Delete the shift for {employee.full_name} on "
+            f"{format_full_date_label(shift.shift_date)}\n"
+            f"{format_time_range(shift.start_time, shift.end_time)}?"
+        )
+        dialog: DeleteConfirmDialog = DeleteConfirmDialog(
+            "Delete shift", message, parent=self
+        )
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+        try:
+            self.controller.delete_shift(shift_id)
+        except WorkshiftError as exc:
+            self._show_error("Cannot delete shift", str(exc))
