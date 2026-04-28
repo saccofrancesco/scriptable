@@ -226,3 +226,52 @@ class WorkloadCard(CardFrame):
             )
         )
         self._progress.setValue(int(round(workload.progress_ratio * 100)))
+
+
+class CalendarDayWidget(CardFrame):
+    clicked: pyqtSignal = pyqtSignal(object)
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent, "calendarCell")
+        self._vm: CalendarDayVM | None = None
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setMinimumSize(82, 58)
+
+        layout: QVBoxLayout = QVBoxLayout(self)
+        layout.setContentsMargins(6, 6, 6, 6)
+        layout.setSpacing(4)
+
+        top_row: QHBoxLayout = QHBoxLayout()
+        top_row.setSpacing(3)
+        self._day_label: QLabel = QLabel("1", self)
+        self._day_label.setObjectName("calendarDayLabel")
+        self._day_label.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents, True
+        )
+        self._today_dot: QFrame = QFrame(self)
+        self._today_dot.setFixedSize(6, 6)
+        self._today_dot.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents, True
+        )
+        self._today_dot.setStyleSheet("background: #2563eb; border-radius: 3px;")
+        top_row.addWidget(self._day_label)
+        top_row.addStretch(1)
+        top_row.addWidget(self._today_dot)
+
+        bottom_row: QHBoxLayout = QHBoxLayout()
+        bottom_row.setSpacing(3)
+        self._chips: list[ColorSwatch] = [ColorSwatch(8, self) for _ in range(3)]
+        for chip in self._chips:
+            chip.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            bottom_row.addWidget(chip)
+        self._overflow_label: QLabel = QLabel(self)
+        self._overflow_label.setObjectName("calendarOverflow")
+        self._overflow_label.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents, True
+        )
+        bottom_row.addWidget(self._overflow_label)
+        bottom_row.addStretch(1)
+
+        layout.addLayout(top_row)
+        layout.addStretch(1)
+        layout.addLayout(bottom_row)
