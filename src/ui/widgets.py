@@ -183,3 +183,31 @@ class ShiftRowWidget(CardFrame):
         layout.addWidget(self._duration_label)
         layout.addWidget(self._edit_button)
         layout.addWidget(self._delete_button)
+
+
+class WorkloadCard(CardFrame):
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._vm: EmployeeWorkloadVM | None = None
+
+        layout: QVBoxLayout = QVBoxLayout(self)
+        layout.setContentsMargins(12, 10, 12, 10)
+        layout.setSpacing(6)
+
+        top_row: QHBoxLayout = QHBoxLayout()
+        top_row.setSpacing(6)
+        self._swatch: ColorSwatch = ColorSwatch(8, self)
+        self._name_label: QLabel = QLabel(self)
+        self._name_label.setObjectName("workloadTitle")
+        top_row.addWidget(self._swatch)
+        top_row.addWidget(self._name_label, 1)
+
+        self._summary_label: QLabel = QLabel(self)
+        self._summary_label.setObjectName("workloadMeta")
+
+        self._progress: QProgressBar = QProgressBar(self)
+        self._progress.setTextVisible(False)
+
+        layout.addLayout(top_row)
+        layout.addWidget(self._summary_label)
+        layout.addWidget(self._progress)
