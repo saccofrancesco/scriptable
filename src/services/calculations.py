@@ -127,3 +127,27 @@ def build_employee_workloads(
             )
         )
     return workloads
+
+
+def month_shift_rows(schedule: Schedule, month_date: date) -> list[ShiftRowVM]:
+    rows: list[ShiftRowVM] = list()
+    employees_by_id: dict[str, Employee] = {
+        employee.id: employee for employee in schedule.employees
+    }
+    month_key: tuple[int, int] = (month_date.year, month_date.month)
+    for shift in schedule.shifts:
+        if (shift.shift_date.year, shift.shift_date.month) != month_key:
+            continue
+        employee: Employee = employees_by_id.get(shift.employee_id)
+        rows.append(
+            ShiftRowVM(
+                id=shift.id,
+                employee_id=shift.employee_id,
+                employee_name=employee.full_name if employee else "Unknown employee",
+                color_hex=employee.color_hex if employee else "#94a3b8",
+                start_time=shift.start_time,
+                end_time=shift.end_time,
+                duration_hours=shift_duration_hours(shift),
+            )
+        )
+    return sorted(rows, key=lambda row: row.employee_name.casefold())
