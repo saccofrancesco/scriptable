@@ -15,3 +15,8 @@ def _solid_fill(color_hex: str) -> PatternFill:
 
 def _font_color(color_hex: str) -> str:
     return f"FF{color_hex.replace('#', '').upper()}"
+
+
+def _apply_border(cell) -> None:
+    thin: Side = Side(style="thin", color="D7DCE3")
+    cell.border = Border(left=thin, right=thin, top=thin, bottom=thin)
