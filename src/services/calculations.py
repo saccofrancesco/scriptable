@@ -79,3 +79,13 @@ def workdays_in_month(month_date: date, workdays: Iterable[int]) -> int:
         if current.weekday() in allowed:
             count += 1
     return count
+
+
+def monthly_target_hours(employee: Employee, month_date: date) -> float:
+    if not employee.workdays:
+        return 0.0
+    workday_count: int = workdays_in_month(month_date, employee.workdays)
+    if workday_count == 0:
+        return 0.0
+    configured_days: int = len(employee.workdays)
+    return employee.weekly_target_hours / configured_days * workday_count
