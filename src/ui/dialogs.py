@@ -252,3 +252,11 @@ class ShiftDialog(QDialog):
             if self._employee_combo.itemData(index) == employee_id:
                 self._employee_combo.setCurrentIndex(index)
                 return
+
+    def get_values(self) -> dict[str, object]:
+        return {
+            "employee_id": self._employee_combo.currentData(),
+            "shift_date": self._shift_date,
+            "start_time": self._start_time.time().toPyTime(),
+            "end_time": self._end_time.time().toPyTime(),
+        }
