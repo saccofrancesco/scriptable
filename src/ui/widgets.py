@@ -275,3 +275,20 @@ class CalendarDayWidget(CardFrame):
         layout.addLayout(top_row)
         layout.addStretch(1)
         layout.addLayout(bottom_row)
+
+    def set_day(self, day: CalendarDayVM) -> None:
+        self._vm: CalendarDayVM = day
+        self.setToolTip(day.tooltip)
+        self._day_label.setText(str(day.day_number))
+        self._today_dot.setVisible(day.is_today)
+        for index, chip in enumerate(self._chips):
+            if index < len(day.employee_colors):
+                chip.set_color(day.employee_colors[index])
+                chip.show()
+            else:
+                chip.hide()
+        self._overflow_label.setText(
+            f"+{day.overflow_count}" if day.overflow_count else ""
+        )
+        self._overflow_label.setVisible(day.overflow_count > 0)
+        self._apply_state(day)
