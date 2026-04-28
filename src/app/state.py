@@ -17,5 +17,5 @@ def create_default_view_state(today: date | None = None) -> ViewState:
 
 @dataclass(slots=True)
 class SessionState:
-    scheudle: Schedule = field(default_factory=Schedule)
+    schedule: Schedule = field(default_factory=Schedule)
     view_state: ViewState = field(default_factory=create_default_view_state)
