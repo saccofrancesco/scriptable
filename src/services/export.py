@@ -227,3 +227,17 @@ def _write_workload_sheet(sheet, schedule: Schedule, month_date: date) -> None:
     sheet.freeze_panes = "A5"
     _set_page_setup(sheet)
     _set_widths(sheet, {"A": 26, "B": 16, "C": 16, "D": 18, "E": 16})
+
+
+def export_schedule_xlsx(
+    schedule: Schedule, month_date: date, file_path: str | Path
+) -> Path:
+    path: Path = Path(file_path)
+    workbook: Workbook = Workbook()
+    schedule_sheet = workbook.active
+    schedule_sheet.title = "Schedule"
+    _write_schedule_sheet(schedule_sheet, schedule, month_date)
+    workload_sheet = workbook.create_sheet("Workload")
+    _write_workload_sheet(workload_sheet, schedule, month_date)
+    workbook.save(path)
+    return path
