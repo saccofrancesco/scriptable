@@ -53,7 +53,7 @@ class ColorSwatch(QFrame):
         self._size = size
         self.setFixedSize(size, size)
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
-        self.setColor("#2563eb")
+        self.set_color("#2563eb")
 
     def set_color(self, color_hex: str) -> None:
         self.setStyleSheet(
@@ -317,6 +317,6 @@ class CalendarDayWidget(CardFrame):
         self._today_dot.setVisible(day.is_today)
 
     def mousePressEvent(self, event) -> None:
-        if event.button() == Qt.MouseButton.LeftButton and self._wm is not None:
+        if event.button() == Qt.MouseButton.LeftButton and self._vm is not None:
             self.clicked.emit(self._vm.date)
         super().mousePressEvent(event)
