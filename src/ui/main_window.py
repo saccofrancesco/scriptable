@@ -62,9 +62,18 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.main_splitter, 1)
         self.setCentralWidget(central)
 
+        self.workload_panel.export_requested.connect(self._export_schedule)
         self.employee_panel.add_requested.connect(self._add_employee)
         self.employee_panel.edit_requested.connect(self._edit_employee)
         self.employee_panel.delete_requested.connect(self._delete_employee)
+        self.calendar_panel.previous_month_requested.connect(
+            lambda: self.controller.move_month(-1)
+        )
+        self.calendar_panel.next_month_requested.connect(
+            lambda: self.controller.move_month(1)
+        )
+        self.calendar_panel.today_requested.connect(self.controller.go_today)
+        self.calendar_panel.day_selected.connect(self.controller.set_selected_day)
         self.shift_panel.add_requested.connect(self._add_shift)
         self.shift_panel.edit_requested.connect(self._edit_shift)
         self.shift_panel.delete_requested.connect(self._delete_shift)
