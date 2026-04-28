@@ -61,6 +61,10 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.main_splitter, 1)
         self.setCentralWidget(central)
 
+        self.controller.changed.connect(self.refresh)
+
+        self.refresh()
+
     def refresh(self) -> None:
         employees: list[EmployeeListItemVM] = self.controller.employee_rows()
         self.employee_panel.set_employees(employees)
