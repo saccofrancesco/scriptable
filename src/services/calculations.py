@@ -89,3 +89,15 @@ def monthly_target_hours(employee: Employee, month_date: date) -> float:
         return 0.0
     configured_days: int = len(employee.workdays)
     return employee.weekly_target_hours / configured_days * workday_count
+
+
+def assigned_hours_for_employee(
+    schedule: Schedule, employee_id: str, month_date: date
+) -> float:
+    month_index: tuple[int, int] = (month_date.year, month_date.month)
+    return sum(
+        shift_duration_hours(shift)
+        for shift in schedule.shifts
+        if shift.employee_id == employee_id
+        and (shift.shift_date.year, shift.shift_date.month) == month_index
+    )
