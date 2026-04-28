@@ -17,3 +17,7 @@ def add_months(value: date, delta: int) -> date:
     last_day: tuple[int, int] = monthrange(year, month)[1]
     day: int = min(value.day, last_day)
     return date(year, month, day)
+
+
+def month_day_count(value: date) -> int:
+    return monthrange(value.year, value.month)[1]
