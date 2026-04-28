@@ -160,3 +160,83 @@ class EmployeeDialog(QDialog):
             QMessageBox.warning(self, "Missing data", "Select at least one workday.")
             return
         super().accept()
+
+
+class ShiftDialog(QDialog):
+    def __init__(
+        self,
+        selected_day: date,
+        employees: Sequence[Employee],
+        shift: Shift | None = None,
+        parent: QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self._shift_date: date = shift.shift_date if shift is not None else selected_day
+        self.setWindowTitle("Add shift" if shift is None else "Edit shift")
+        self.setMinimumWidth(470)
+
+        outer: QVBoxLayout = QVBoxLayout(self)
+        outer.setContentsMargins(18, 18, 18, 18)
+        outer.setSpacing(14)
+
+        card: CardFrame = CardFrame(self, "dialogCard")
+        card_layout: QVBoxLayout = QVBoxLayout(card)
+        card_layout.setContentsMargins(18, 18, 18, 18)
+        card_layout.setSpacing(14)
+
+        title: QLabel = QLabel("Add shift" if shift is None else "Edit shift", self)
+        title.setObjectName("panelTitle")
+        subtitle: QLabel = QLabel(
+            f"Selected day: {format_full_date_label(self._shift_date)}",
+            self,
+        )
+        subtitle.setObjectName("panelSubtitle")
+        subtitle.setWordWrap(True)
+
+        form: QFormLayout = QFormLayout()
+        form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
+        form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
+        form.setVerticalSpacing(12)
+        form.setHorizontalSpacing(14)
+
+        self._employee_combo: QComboBox = QComboBox(self)
+        self._employee_combo.setMinimumWidth(220)
+        for employee in employees:
+            self._employee_combo.addItem(employee.full_name, employee.id)
+
+        self._start_time: QTimeEdit = QTimeEdit(self)
+        self._start_time.setDisplayFormat("HH:mm")
+        self._start_time.setTime(QTime(9, 0))
+
+        self._end_time: QTimeEdit = QTimeEdit(self)
+        self._end_time.setDisplayFormat("HH:mm")
+        self._end_time.setTime(QTime(17, 0))
+
+        form.addRow("Employee", self._employee_combo)
+        form.addRow("Start time", self._start_time)
+        form.addRow("End time", self._end_time)
+
+        button_box: QDialogButtonBox = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Cancel | QDialogButtonBox.StandardButton.Ok,
+            parent=self,
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Save")
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setObjectName(
+            "primaryButton"
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Cancel).setObjectName(
+            "secondaryButton"
+        )
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+
+        card_layout.addWidget(title)
+        card_layout.addWidget(subtitle)
+        card_layout.addLayout(form)
+        card_layout.addWidget(button_box)
+        outer.addWidget(card)
+
+        if shift is not None:
+            self.set_shift(shift, employees)
+
+        self._employee_combo.setEnabled(bool(employees))
