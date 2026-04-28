@@ -4,6 +4,7 @@ from ..app.controller import WorkshiftController
 from ..services.view_models import EmployeeListItemVM
 from ..services.formatting import format_full_date_label, format_time_range
 from ..services.validation import WorkshiftError
+from ..domain.models import Employee
 from .dialogs import DeleteConfirmDialog, EmployeeDialog, ShiftDialog
 from .panels import CalendarPanel, EmployeePanel, ShiftPanel, WorkloadPanel
 from PyQt6.QtCore import Qt
@@ -89,3 +90,17 @@ class MainWindow(QMainWindow):
             self.controller.add_employee(**dialog.get_values())
         except WorkshiftError as exc:
             self._show_error("Cannot add person", str(exc))
+
+    def _edit_employee(self, employee_id: str) -> None:
+        try:
+            employee: Employee = self.controller.get_employee(employee_id)
+        except WorkshiftError as exc:
+            self._show_error("Cannot edit person", str(exc))
+            return
+        dialog: EmployeeDialog = EmployeeDialog(employee=employee, parent=self)
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+        try:
+            self.controller.edit_employee(employee_id, **dialog.get_values())
+        except WorkshiftError as exc:
+            self._show_error("Cannot edit person", str(exc))
