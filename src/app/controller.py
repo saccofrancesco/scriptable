@@ -19,3 +19,12 @@ from ..services.validation import (
     validate_shift_fields,
 )
 from .state import SessionState, ViewState, create_default_view_state
+
+
+def _normalize_color_hex(color_hex: str) -> str:
+    value: str = color_hex.strip()
+    if not value.startswith("#"):
+        value: str = f"#{value}"
+    if len(value) != 7:
+        raise WorkshiftError("Color must be a hex value like #2563eb.")
+    return value.lower()
