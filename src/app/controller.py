@@ -102,3 +102,28 @@ class WorkshiftController(QObject):
         self.view_state.selected_day = today
         self.view_state.selected_month = today.replace(day=1)
         self.changed.emit()
+
+    def add_employee(
+        self,
+        first_name: str,
+        last_name: str,
+        weekly_target_hours: float,
+        workdays,
+        color_hex: str,
+    ) -> Employee:
+        first_name, last_name, weekly_target_hours, workdays = validate_employee_fields(
+            first_name,
+            last_name,
+            weekly_target_hours,
+            workdays,
+        )
+        employee: Employee = Employee(
+            first_name=first_name,
+            last_name=last_name,
+            weekly_target_hours=weekly_target_hours,
+            workdays=workdays,
+            color_hex=_normalize_color_hex(color_hex),
+        )
+        self.schedule.employees.append(employee)
+        self.changed.emit()
+        return employee
