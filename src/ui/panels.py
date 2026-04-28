@@ -222,3 +222,6 @@ class ShiftPanel(CardFrame):
 
     def set_selected_day(self, selected_day: date) -> None:
         self._selected_day_label.setText(format_full_date_label(selected_day))
+
+    def set_add_enabled(self, enabled: bool) -> None:
+        self._add_button.setEnabled(enabled)
