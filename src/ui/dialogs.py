@@ -246,3 +246,9 @@ class ShiftDialog(QDialog):
         self._find_and_select_employee(shift.employee_id)
         self._start_time.setTime(QTime(shift.start_time.hour, shift.start_time.minute))
         self._end_time.setTime(QTime(shift.end_time.hour, shift.end_time.minute))
+
+    def _find_and_select_employee(self, employee_id: str) -> None:
+        for index in range(self._employee_combo.count()):
+            if self._employee_combo.itemData(index) == employee_id:
+                self._employee_combo.setCurrentIndex(index)
+                return
