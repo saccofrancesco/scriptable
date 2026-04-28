@@ -40,3 +40,31 @@ def shift_duration_hours(shift: Shift) -> float:
     start: datetime = datetime.combine(shift.shift_date, shift.start_time)
     end: datetime = datetime.combine(shift.shift_date, shift.end_time)
     return (end - start).total_seconds() / 3600
+
+
+def build_daily_shift_rows(schedule: Schedule, selected_day: date) -> list[ShiftRowVM]:
+    employees_by_id: dict[str, Employee] = {
+        employee.id: employee for employee in schedule.employees
+    }
+    rows: list[ShiftRowVM] = [
+        ShiftRowVM(
+            id=shift.id,
+            employee_id=shift.employee_id,
+            employee_name=(
+                employees_by_id.get(shift.employee_id).full_name
+                if employees_by_id.get(shift.employee_id)
+                else "Unknown employee"
+            ),
+            color_hex=(
+                employees_by_id.get(shift.employee_id).color_hex
+                if employees_by_id.get(shift.employee_id)
+                else "#94a3b8"
+            ),
+            start_time=shift.start_time,
+            end_time=shift.end_time,
+            duration_hours=shift_duration_hours(shift),
+        )
+        for shift in schedule.shifts
+        if shift.shift_date == selected_day
+    ]
+    return sorted(rows, key=lambda row: (row.start_time, row.employee_name.casefold()))
