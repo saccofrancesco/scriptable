@@ -53,10 +53,7 @@ class EmployeePanel(CardFrame):
         title_box.setSpacing(1)
         title: QLabel = QLabel("Employees", self)
         title.setObjectName("panelTitle")
-        subtitle: QLabel = QLabel("People, colors, and weekly targets", self)
-        subtitle.setObjectName("panelSubtitle")
         title_box.addWidget(title)
-        title_box.addWidget(subtitle)
         header.addLayout(title_box, 1)
 
         self._add_button: QPushButton = QPushButton("Add person", self)
