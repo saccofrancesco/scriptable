@@ -44,7 +44,7 @@ class WorkshiftController(QObject):
 
     @property
     def schedule(self) -> Schedule:
-        return self.state.scheudle
+        return self.state.schedule
 
     @property
     def view_state(self) -> ViewState:
