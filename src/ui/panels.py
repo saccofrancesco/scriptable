@@ -225,3 +225,20 @@ class ShiftPanel(CardFrame):
 
     def set_add_enabled(self, enabled: bool) -> None:
         self._add_button.setEnabled(enabled)
+
+    def set_shifts(self, shifts: Sequence[ShiftRowVM]) -> None:
+        clear_layout(self._content_layout)
+        self.row_widgets: list[ShiftRowWidget] = list()
+        if not shifts:
+            self._content_layout.addWidget(
+                make_empty_label("No shifts for this day yet.")
+            )
+            self._content_layout.addStretch(1)
+            return
+        for shift in shifts:
+            row = ShiftRowWidget(shift, self._content)
+            row.edit_requested.connect(self.edit_requested.emit)
+            row.delete_requested.connect(self.delete_requested.emit)
+            self._content_layout.addWidget(row)
+            self.row_widgets.append(row)
+        self._content_layout.addStretch(1)
