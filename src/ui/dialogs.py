@@ -268,3 +268,51 @@ class ShiftDialog(QDialog):
             )
             return
         super().accept()
+
+
+class DeleteConfirmDialog(QDialog):
+    def __init__(self, title: str, message: str, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setWindowTitle(title)
+        self.setMinimumWidth(460)
+
+        outer: QVBoxLayout = QVBoxLayout(self)
+        outer.setContentsMargins(18, 18, 18, 18)
+        outer.setSpacing(14)
+
+        card: CardFrame = CardFrame(self, "dialogCard")
+        card_layout = QVBoxLayout(card)
+        card_layout.setContentsMargins(18, 18, 18, 18)
+        card_layout.setSpacing(12)
+
+        title_label: QLabel = QLabel(title, self)
+        title_label.setObjectName("panelTitle")
+        message_label: QLabel = QLabel(message, self)
+        message_label.setObjectName("panelSubtitle")
+        message_label.setWordWrap(True)
+
+        warning_label: QLabel = QLabel("This action cannot be undone.", self)
+        warning_label.setObjectName("dangerHint")
+        warning_label.setWordWrap(True)
+
+        button_box: QDialogButtonBox = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Cancel | QDialogButtonBox.StandardButton.Ok,
+            parent=self,
+        )
+        self.confirm_button: QPushButton | None = button_box.button(
+            QDialogButtonBox.StandardButton.Ok
+        )
+        self.confirm_button.setText("Delete")
+        self.confirm_button.setObjectName("dangerButton")
+        self.cancel_button: QPushButton | None = button_box.button(
+            QDialogButtonBox.StandardButton.Cancel
+        )
+        self.cancel_button.setObjectName("secondaryButton")
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+
+        card_layout.addWidget(title_label)
+        card_layout.addWidget(message_label)
+        card_layout.addWidget(warning_label)
+        card_layout.addWidget(button_box)
+        outer.addWidget(card)
