@@ -127,3 +127,27 @@ class WorkshiftController(QObject):
         self.schedule.employees.append(employee)
         self.changed.emit()
         return employee
+
+    def edit_employee(
+        self,
+        employee_id: str,
+        first_name: str,
+        last_name: str,
+        weekly_target_hours: float,
+        workdays,
+        color_hex: str,
+    ) -> Employee:
+        first_name, last_name, weekly_target_hours, workdays = validate_employee_fields(
+            first_name,
+            last_name,
+            weekly_target_hours,
+            workdays,
+        )
+        employee: Employee = require_employee(self.schedule, employee_id)
+        employee.first_name = first_name
+        employee.last_name = last_name
+        employee.weekly_target_hours = weekly_target_hours
+        employee.workdays = workdays
+        employee.color_hex = _normalize_color_hex(color_hex)
+        self.changed.emit()
+        return employee
