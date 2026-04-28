@@ -260,3 +260,11 @@ class ShiftDialog(QDialog):
             "start_time": self._start_time.time().toPyTime(),
             "end_time": self._end_time.time().toPyTime(),
         }
+
+    def accept(self) -> None:
+        if self._employee_combo.count() == 0:
+            QMessageBox.warning(
+                self, "Missing data", "Add at least one person before creating shifts."
+            )
+            return
+        super().accept()
