@@ -30,3 +30,16 @@ def _style_header_row(sheet, row_index: int, columns: int) -> None:
         cell.fill = fill
         cell.alignment = Alignment(horizontal="center", vertical="center")
         _apply_border(cell)
+
+
+def _format_sheet_title(sheet, title: str, subtitle: str, columns: int) -> None:
+    sheet.merge_cells(start_row=1, start_column=1, end_row=1, end_column=columns)
+    sheet.merge_cells(start_row=2, start_column=1, end_row=2, end_column=columns)
+    title_cell = sheet.cell(row=1, column=1)
+    subtitle_cell = sheet.cell(row=2, column=1)
+    title_cell.value = title
+    subtitle_cell.value = subtitle
+    title_cell.font = Font(size=15, bold=True, color="0F172A")
+    subtitle_cell.font = Font(size=10, color="475569")
+    title_cell.alignment = Alignment(horizontal="left")
+    subtitle_cell.alignment = Alignment(horizontal="left")
