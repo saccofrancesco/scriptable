@@ -137,3 +137,12 @@ class EmployeeDialog(QDialog):
     def _on_selection_changed(self) -> None:
         # No-op for now; the button state is validated on save.
         pass
+
+    def get_values(self) -> dict[str, object]:
+        return {
+            "first_name": self._first_name.text(),
+            "last_name": self._last_name.text(),
+            "weekly_target_hours": float(self._weekly_target.value()),
+            "workdays": self._weekday_selector.selected_days(),
+            "color_hex": self._color_hex,
+        }
