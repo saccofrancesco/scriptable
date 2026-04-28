@@ -79,3 +79,12 @@ class MainWindow(QMainWindow):
 
     def _show_error(self, title: str, message: str) -> None:
         QMessageBox.warning(self, title, message)
+
+    def _add_employee(self) -> None:
+        dialog: EmployeeDialog = EmployeeDialog(parent=self)
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+        try:
+            self.controller.add_employee(**dialog.get_values())
+        except WorkshiftError as exc:
+            self._show_error("Cannot add person", str(exc))
