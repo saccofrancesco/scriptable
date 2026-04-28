@@ -16,3 +16,21 @@ def normalize_workdays(workdays: Iterable[int]) -> tuple[int, ...]:
     if invalid:
         raise WorkshiftError("Workdays must be between Monday and Sunday.")
     return normalized
+
+
+def validate_employee_fields(
+    first_name: str,
+    last_name: str,
+    weekly_target_hours: float,
+    workdays: Iterable[int],
+) -> tuple[str, str, float, tuple[int, ...]]:
+    first_name: str = first_name.strip()
+    last_name: str = last_name.strip()
+    if not first_name:
+        raise WorkshiftError("First name is required.")
+    if not last_name:
+        raise WorkshiftError("Last name is required.")
+    if weekly_target_hours < 0:
+        raise WorkshiftError("Weekly target hours cannot be negative.")
+    normalized_workdays: tuple[int, ...] = normalize_workdays(workdays)
+    return first_name, last_name, weekly_target_hours, normalized_workdays
