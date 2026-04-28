@@ -255,10 +255,7 @@ class WorkloadPanel(CardFrame):
         title_box.setSpacing(1)
         title: QLabel = QLabel("Employee workload recap", self)
         title.setObjectName("panelTitle")
-        subtitle: QLabel = QLabel("Live totals, targets, and remaining hours", self)
-        subtitle.setObjectName("panelSubtitle")
         title_box.addWidget(title)
-        title_box.addWidget(subtitle)
         header.addLayout(title_box, 1)
 
         self.export_button: QPushButton = QPushButton("Export .xlsx", self)
