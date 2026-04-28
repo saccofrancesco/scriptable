@@ -156,7 +156,7 @@ class ShiftRowWidget(CardFrame):
         self._swatch: ColorSwatch = ColorSwatch(12, self)
         self._swatch.set_color(shift.color_hex)
 
-        text_box: QVBoxLayout = QVBoxLayout(shift)
+        text_box: QVBoxLayout = QVBoxLayout()
         text_box.setSpacing(2)
         self._name_label: QLabel = QLabel(shift.employee_name, self)
         self._name_label.setObjectName("rowTitle")
@@ -183,7 +183,7 @@ class ShiftRowWidget(CardFrame):
         )
 
         layout.addWidget(self._swatch)
-        layout.addWidget(text_box, 1)
+        layout.addLayout(text_box, 1)
         layout.addWidget(self._duration_label)
         layout.addWidget(self._edit_button)
         layout.addWidget(self._delete_button)
