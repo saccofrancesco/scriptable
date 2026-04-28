@@ -61,6 +61,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.main_splitter, 1)
         self.setCentralWidget(central)
 
+        self.employee_panel.add_requested.connect(self._add_employee)
         self.controller.changed.connect(self.refresh)
 
         self.refresh()
