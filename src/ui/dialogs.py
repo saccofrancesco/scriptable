@@ -68,6 +68,7 @@ class EmployeeDialog(QDialog):
         self._weekly_target.setSuffix(" h")
 
         self._weekday_selector: WeekdaySelector = WeekdaySelector(self)
+        self._weekday_selector.selection_changed.connect(self._on_selection_changed)
 
         self._color_hex: str = "#2563eb"
         color_row: QHBoxLayout = QHBoxLayout()
@@ -76,6 +77,7 @@ class EmployeeDialog(QDialog):
         self._color_label: QLabel = QLabel(self._color_hex, self)
         self._color_label.setObjectName("rowMeta")
         self._color_button: QPushButton = QPushButton("Choose color", self)
+        self._color_button.clicked.connect(lambda _=False: self._choose_color())
         color_row.addWidget(self._color_swatch)
         color_row.addWidget(self._color_label)
         color_row.addStretch(1)
