@@ -41,3 +41,19 @@ class WorkshiftController(QObject):
             schedule=schedule or Schedule(),
             view_state=create_default_view_state(today),
         )
+
+    @property
+    def schedule(self) -> Schedule:
+        return self.state.scheudle
+
+    @property
+    def view_state(self) -> ViewState:
+        return self.state.view_state
+
+    @property
+    def selected_day(self) -> date:
+        return self.view_state.selected_day
+
+    @property
+    def selected_month(self) -> date:
+        return self.view_state.selected_month
