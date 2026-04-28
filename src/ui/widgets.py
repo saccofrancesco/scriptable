@@ -292,3 +292,27 @@ class CalendarDayWidget(CardFrame):
         )
         self._overflow_label.setVisible(day.overflow_count > 0)
         self._apply_state(day)
+
+    def _apply_state(self, day: CalendarDayVM) -> None:
+        if day.is_selected:
+            background: str = "#dbeafe"
+            border: str = "#2563eb"
+        elif day.is_today:
+            background: str = "#ffffff"
+            border: str = "#2563eb"
+        elif day.in_current_month:
+            background: str = "#ffffff"
+            border: str = "#d8e0ea"
+        else:
+            background: str = "#f8fafc"
+            border: str = "#e2e8f0"
+        text_color: str = (
+            "#0f172a"
+            if day.in_current_month or day.is_selected or day.is_today
+            else "#64748b"
+        )
+        self.setStyleSheet(
+            f"QFrame#calendarCell {{ background: {background}; border: 1px solid {border}; border-radius: 11px; }}"
+        )
+        self._day_label.setStyleSheet(f"color: {text_color};")
+        self._today_dot.setVisible(day.is_today)
