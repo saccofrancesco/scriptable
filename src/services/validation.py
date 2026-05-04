@@ -23,6 +23,7 @@ def validate_employee_fields(
     last_name: str,
     weekly_target_hours: float,
     workdays: Iterable[int],
+    lunch_break_hours: float = 1.0,
 ) -> tuple[str, str, float, tuple[int, ...]]:
     first_name: str = first_name.strip()
     last_name: str = last_name.strip()
@@ -32,6 +33,8 @@ def validate_employee_fields(
         raise WorkshiftError("Last name is required.")
     if weekly_target_hours < 0:
         raise WorkshiftError("Weekly target hours cannot be negative.")
+    if lunch_break_hours < 0:
+        raise WorkshiftError("Lunch break hours cannot be negative.")
     normalized_workdays: tuple[int, ...] = normalize_workdays(workdays)
     return first_name, last_name, weekly_target_hours, normalized_workdays
 
