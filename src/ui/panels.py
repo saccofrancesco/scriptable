@@ -13,7 +13,6 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 from ..services.formatting import (
-    format_full_date_label,
     format_month_label,
     weekday_abbrev,
 )
@@ -192,11 +191,6 @@ class ShiftPanel(CardFrame):
         self._add_button.clicked.connect(lambda _=False: self.add_requested.emit())
         header.addWidget(self._add_button)
 
-        self._selected_day_label: QLabel = QLabel(
-            format_full_date_label(date.today()), self
-        )
-        self._selected_day_label.setObjectName("panelSubtitle")
-
         self._scroll: QScrollArea = QScrollArea(self)
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -209,13 +203,9 @@ class ShiftPanel(CardFrame):
         self._scroll.setWidget(self._content)
 
         outer.addLayout(header)
-        outer.addWidget(self._selected_day_label)
         outer.addWidget(self._scroll, 1)
 
         self.setMinimumWidth(300)
-
-    def set_selected_day(self, selected_day: date) -> None:
-        self._selected_day_label.setText(format_full_date_label(selected_day))
 
     def set_add_enabled(self, enabled: bool) -> None:
         self._add_button.setEnabled(enabled)
