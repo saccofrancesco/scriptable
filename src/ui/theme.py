@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from PyQt6.QtGui import QColor, QFont, QPalette
 from PyQt6.QtWidgets import QApplication
 
@@ -205,15 +204,16 @@ QScrollBar::sub-line {
 
 QProgressBar {
     background: #e2e8f0;
-    border: none;
-    border-radius: 999px;
+    border: 1px solid #d9e0ea;
+    border-radius: 10px;
     text-align: left;
-    height: 6px;
+    min-height: 10px;
+    padding: 1px;
 }
 
 QProgressBar::chunk {
     background: #2563eb;
-    border-radius: 999px;
+    border-radius: 8px;
 }
 """
 
