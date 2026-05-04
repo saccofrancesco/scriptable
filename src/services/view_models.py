@@ -9,6 +9,7 @@ class EmployeeListItemVM:
     full_name: str
     color_hex: str
     weekly_target_hours: float
+    lunch_break_hours: float
     workdays: tuple[int, ...]
 
 
