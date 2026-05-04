@@ -110,12 +110,14 @@ class WorkshiftController(QObject):
         weekly_target_hours: float,
         workdays,
         color_hex: str,
+        lunch_break_hours: float = 1.0,
     ) -> Employee:
         first_name, last_name, weekly_target_hours, workdays = validate_employee_fields(
             first_name,
             last_name,
             weekly_target_hours,
             workdays,
+            lunch_break_hours,
         )
         employee: Employee = Employee(
             first_name=first_name,
@@ -123,6 +125,7 @@ class WorkshiftController(QObject):
             weekly_target_hours=weekly_target_hours,
             workdays=workdays,
             color_hex=_normalize_color_hex(color_hex),
+            lunch_break_hours=lunch_break_hours,
         )
         self.schedule.employees.append(employee)
         self.changed.emit()
@@ -136,12 +139,14 @@ class WorkshiftController(QObject):
         weekly_target_hours: float,
         workdays,
         color_hex: str,
+        lunch_break_hours: float = 1.0,
     ) -> Employee:
         first_name, last_name, weekly_target_hours, workdays = validate_employee_fields(
             first_name,
             last_name,
             weekly_target_hours,
             workdays,
+            lunch_break_hours,
         )
         employee: Employee = require_employee(self.schedule, employee_id)
         employee.first_name = first_name
@@ -149,6 +154,7 @@ class WorkshiftController(QObject):
         employee.weekly_target_hours = weekly_target_hours
         employee.workdays = workdays
         employee.color_hex = _normalize_color_hex(color_hex)
+        employee.lunch_break_hours = lunch_break_hours
         self.changed.emit()
         return employee
 
@@ -172,6 +178,7 @@ class WorkshiftController(QObject):
         shift_date: date,
         start_time: time,
         end_time: time,
+        includes_lunch_break: bool = True,
     ) -> Shift:
         validate_shift_fields(
             self.schedule, employee_id, shift_date, start_time, end_time
@@ -181,6 +188,7 @@ class WorkshiftController(QObject):
             shift_date=shift_date,
             start_time=start_time,
             end_time=end_time,
+            includes_lunch_break=includes_lunch_break,
         )
         self.schedule.shifts.append(shift)
         self.changed.emit()
@@ -193,6 +201,7 @@ class WorkshiftController(QObject):
         shift_date: date,
         start_time: time,
         end_time: time,
+        includes_lunch_break: bool = True,
     ) -> Shift:
         validate_shift_fields(
             self.schedule,
@@ -207,6 +216,7 @@ class WorkshiftController(QObject):
         shift.shift_date = shift_date
         shift.start_time = start_time
         shift.end_time = end_time
+        shift.includes_lunch_break = includes_lunch_break
         self.changed.emit()
         return shift
 
