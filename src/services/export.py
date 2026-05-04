@@ -6,7 +6,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from ..domain.models import Employee, Schedule, Shift
 from .view_models import EmployeeWorkloadVM
-from .calculations import build_employee_workloads
+from .calculations import build_employee_workloads, shift_work_hours
 from .formatting import contrast_text_color, format_month_label
 
 
@@ -103,6 +103,9 @@ def _write_schedule_sheet(sheet, schedule: Schedule, month_date: date) -> None:
             ),
         ),
     )
+    employees_by_id: dict[str, Employee] = {
+        employee.id: employee for employee in schedule.employees
+    }
     if not rows:
         sheet.cell(row=start_row, column=1, value="No shifts planned for this month.")
         sheet.merge_cells(
@@ -114,14 +117,7 @@ def _write_schedule_sheet(sheet, schedule: Schedule, month_date: date) -> None:
         return
 
     for index, row in enumerate(rows, start=start_row):
-        employee: Employee = next(
-            (
-                employee
-                for employee in schedule.employees
-                if employee.id == row.employee_id
-            ),
-            None,
-        )
+        employee: Employee = employees_by_id.get(row.employee_id)
         date_cell = sheet.cell(row=index, column=1, value=row.shift_date)
         weekday_cell = sheet.cell(
             row=index, column=2, value=row.shift_date.strftime("%A")
@@ -136,8 +132,10 @@ def _write_schedule_sheet(sheet, schedule: Schedule, month_date: date) -> None:
         hours_cell = sheet.cell(
             row=index,
             column=6,
-            value=(row.end_time.hour + row.end_time.minute / 60)
-            - (row.start_time.hour + row.start_time.minute / 60),
+            value=shift_work_hours(
+                row,
+                employee.lunch_break_hours if employee else 0.0,
+            ),
         )
 
         date_cell.number_format = "yyyy-mm-dd"
