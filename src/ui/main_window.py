@@ -1,15 +1,20 @@
 from __future__ import annotations
-from PyQt6.QtWidgets import QMainWindow
+from pathlib import Path
+from PyQt6.QtCore import Qt
 from ..app.controller import WorkshiftController
-from ..services.view_models import EmployeeListItemVM
 from ..services.formatting import format_full_date_label, format_time_range
 from ..services.validation import WorkshiftError
 from ..domain.models import Employee, Shift
-from .dialogs import DeleteConfirmDialog, EmployeeDialog, ShiftDialog
+from ..services.view_models import EmployeeListItemVM
 from .panels import CalendarPanel, EmployeePanel, ShiftPanel, WorkloadPanel
-from PyQt6.QtCore import Qt
+from .dialogs import (
+    DeleteConfirmDialog,
+    EmployeeDialog,
+    ExportDialog,
+    InfoDialog,
+    ShiftDialog,
+)
 from PyQt6.QtWidgets import (
-    QFileDialog,
     QDialog,
     QMainWindow,
     QMessageBox,
@@ -200,21 +205,17 @@ class MainWindow(QMainWindow):
 
     def _export_schedule(self) -> None:
         default_name: str = f"workshift_{self.controller.selected_month:%Y-%m}.xlsx"
-        file_path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Export schedule",
-            default_name,
-            "Excel Workbook (*.xlsx)",
+        dialog: ExportDialog = ExportDialog(
+            str(Path.home() / default_name), parent=self
         )
-        if not file_path:
+        if dialog.exec() != QDialog.DialogCode.Accepted:
             return
-        if not file_path.lower().endswith(".xlsx"):
-            file_path += ".xlsx"
+        file_path: str = dialog.file_path()
         try:
             self.controller.export_schedule(file_path)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - user-facing export error
             self._show_error("Export failed", str(exc))
             return
-        QMessageBox.information(
-            self, "Export complete", f"Saved schedule to:\n{file_path}"
-        )
+        InfoDialog(
+            "Export complete", f"Saved schedule to:\n{file_path}", parent=self
+        ).exec()
