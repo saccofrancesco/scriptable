@@ -30,6 +30,7 @@ def employee_display_rows(schedule: Schedule) -> list[EmployeeListItemVM]:
             full_name=employee.full_name,
             color_hex=employee.color_hex,
             weekly_target_hours=employee.weekly_target_hours,
+            lunch_break_hours=employee.lunch_break_hours,
             workdays=employee.workdays,
         )
         for employee in schedule.employees
@@ -40,6 +41,13 @@ def shift_duration_hours(shift: Shift) -> float:
     start: datetime = datetime.combine(shift.shift_date, shift.start_time)
     end: datetime = datetime.combine(shift.shift_date, shift.end_time)
     return (end - start).total_seconds() / 3600
+
+
+def shift_work_hours(shift: Shift, lunch_break_hours: float = 0.0) -> float:
+    duration: float = shift_duration_hours(shift)
+    if shift.includes_lunch_break:
+        duration -= max(lunch_break_hours, 0.0)
+    return max(duration, 0.0)
 
 
 def build_daily_shift_rows(schedule: Schedule, selected_day: date) -> list[ShiftRowVM]:
@@ -62,7 +70,14 @@ def build_daily_shift_rows(schedule: Schedule, selected_day: date) -> list[Shift
             ),
             start_time=shift.start_time,
             end_time=shift.end_time,
-            duration_hours=shift_duration_hours(shift),
+            duration_hours=shift_work_hours(
+                shift,
+                (
+                    employees_by_id.get(shift.employee_id).lunch_break_hours
+                    if employees_by_id.get(shift.employee_id)
+                    else 0.0
+                ),
+            ),
         )
         for shift in schedule.shifts
         if shift.shift_date == selected_day
@@ -94,9 +109,14 @@ def monthly_target_hours(employee: Employee, month_date: date) -> float:
 def assigned_hours_for_employee(
     schedule: Schedule, employee_id: str, month_date: date
 ) -> float:
-    month_index: tuple[int, int] = (month_date.year, month_date.month)
+    month_index: int = (month_date.year, month_date.month)
+    employee: Employee = next(
+        (employee for employee in schedule.employees if employee.id == employee_id),
+        None,
+    )
+    lunch_break_hours: float = employee.lunch_break_hours if employee else 0.0
     return sum(
-        shift_duration_hours(shift)
+        shift_work_hours(shift, lunch_break_hours)
         for shift in schedule.shifts
         if shift.employee_id == employee_id
         and (shift.shift_date.year, shift.shift_date.month) == month_index
@@ -147,7 +167,10 @@ def month_shift_rows(schedule: Schedule, month_date: date) -> list[ShiftRowVM]:
                 color_hex=employee.color_hex if employee else "#94a3b8",
                 start_time=shift.start_time,
                 end_time=shift.end_time,
-                duration_hours=shift_duration_hours(shift),
+                duration_hours=shift_work_hours(
+                    shift,
+                    employee.lunch_break_hours if employee else 0.0,
+                ),
             )
         )
     return sorted(rows, key=lambda row: row.employee_name.casefold())
