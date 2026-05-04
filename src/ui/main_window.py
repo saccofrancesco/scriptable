@@ -92,7 +92,6 @@ class MainWindow(QMainWindow):
         self.calendar_panel.set_month(
             self.controller.selected_month, self.controller.calendar_grid()
         )
-        self.shift_panel.set_selected_day(self.controller.selected_day)
         self.shift_panel.set_add_enabled(bool(employees))
         self.shift_panel.set_shifts(self.controller.daily_shift_rows())
         self.workload_panel.set_workloads(self.controller.workload_rows())
