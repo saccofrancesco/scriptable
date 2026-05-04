@@ -16,6 +16,7 @@ class Employee:
     workdays: tuple[int, ...]
     color_hex: str
     id: str = field(default_factory=_new_id)
+    lunch_break_hours: float = 1.0
 
     @property
     def full_name(self) -> str:
@@ -29,6 +30,7 @@ class Shift:
     start_time: time
     end_time: time
     id: str = field(default_factory=_new_id)
+    includes_lunch_break: bool = True
 
 
 @dataclass(slots=True)
