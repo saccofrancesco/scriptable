@@ -116,20 +116,26 @@ class EmployeeRowWidget(CardFrame):
 
         self._name_label: QLabel = QLabel(employee.full_name, self)
         self._name_label.setObjectName("rowTitle")
-        self._meta_label: QLabel = QLabel(
-            f"{format_hours(employee.weekly_target_hours)} / week", self
+        self._meta_label = QLabel(
+            " · ".join(
+                (
+                    f"{format_hours(employee.weekly_target_hours)} / week",
+                    f"{format_hours(employee.lunch_break_hours)} lunch break",
+                )
+            ),
+            self,
         )
         self._meta_label.setObjectName("rowMeta")
 
         text_box.addWidget(self._name_label)
         text_box.addWidget(self._meta_label)
 
-        self._edit_button = QPushButton("Edit", self)
+        self._edit_button: QPushButton = QPushButton("Edit", self)
         self._edit_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self._edit_button.clicked.connect(
             lambda _=False: self.edit_requested.emit(self.employee_id)
         )
-        self._delete_button = QPushButton("Delete", self)
+        self._delete_button: QPushButton = QPushButton("Delete", self)
         self._delete_button.setObjectName("dangerButton")
         self._delete_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self._delete_button.clicked.connect(
@@ -211,6 +217,7 @@ class WorkloadCard(CardFrame):
 
         self._progress: QProgressBar = QProgressBar(self)
         self._progress.setTextVisible(False)
+        self._progress.setMinimumHeight(10)
 
         layout.addLayout(top_row)
         layout.addWidget(self._summary_label)
