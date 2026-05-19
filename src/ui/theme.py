@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 from PyQt6.QtGui import QColor, QFont, QPalette
 from PyQt6.QtWidgets import QApplication
 
@@ -176,9 +177,151 @@ QComboBox::drop-down {
     width: 20px;
 }
 
+QComboBox::down-arrow {
+    image: none;
+    width: 0px;
+    height: 0px;
+}
+
+QComboBox::drop-down:hover {
+    background: #f1f5f9;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #d8e0ea;
+    background: #ffffff;
+    selection-background-color: #dbeafe;
+    selection-color: #0f172a;
+    border-radius: 12px;
+    outline: 0;
+    padding: 4px;
+    show-decoration-selected: 0;
+}
+
+QComboBox QAbstractItemView::item {
+    min-height: 22px;
+    padding: 4px 10px;
+    margin: 2px 4px;
+    border-radius: 8px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background: #f1f5f9;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background: #dbeafe;
+    border-radius: 8px;
+}
+
+QAbstractSpinBox {
+    padding-right: 24px;
+}
+
+QAbstractSpinBox::up-button,
+QAbstractSpinBox::down-button {
+    subcontrol-origin: border;
+    width: 18px;
+    border: none;
+    background: transparent;
+}
+
+QAbstractSpinBox::up-button {
+    subcontrol-position: top right;
+    border-top-right-radius: 7px;
+}
+
+QAbstractSpinBox::down-button {
+    subcontrol-position: bottom right;
+    border-bottom-right-radius: 7px;
+}
+
+QAbstractSpinBox::up-arrow,
+QAbstractSpinBox::down-arrow {
+    width: 0px;
+    height: 0px;
+    image: none;
+}
+
+QAbstractSpinBox::up-button:hover,
+QAbstractSpinBox::down-button:hover {
+    background: #f1f5f9;
+}
+
+QAbstractSpinBox::up-button:pressed,
+QAbstractSpinBox::down-button:pressed {
+    background: #e2e8f0;
+}
+
 QScrollArea {
     border: none;
     background: transparent;
+}
+
+QScrollBar:horizontal {
+    background: transparent;
+    height: 8px;
+    margin: 2px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #cbd5e1;
+    border-radius: 5px;
+    min-width: 24px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: #94a3b8;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QCheckBox {
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #94a3b8;
+    background: #f8fafc;
+}
+
+QCheckBox::indicator:checked {
+    border-color: #2563eb;
+    background-color: #2563eb;
+    background-image: url("CHECK_SVG_PATH");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+QCheckBox::indicator:checked:hover {
+    border-color: #1d4ed8;
+    background-color: #1d4ed8;
+    background-image: url("CHECK_SVG_PATH");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+QCheckBox::indicator:disabled {
+    border-color: #e2e8f0;
+    background: #f8fafc;
 }
 
 QScrollBar:vertical {
@@ -219,6 +362,8 @@ QProgressBar::chunk {
 
 
 def apply_theme(app: QApplication) -> None:
+    check_svg: str = (Path(__file__).resolve().parent / "assets" / "check.svg").as_posix()
+    stylesheet: str = APP_STYLESHEET.replace("CHECK_SVG_PATH", check_svg)
     app.setFont(QFont("Helvetica Neue"))
     palette: QPalette = QPalette()
     palette.setColor(QPalette.ColorRole.Window, QColor("#eef2f7"))
@@ -230,4 +375,4 @@ def apply_theme(app: QApplication) -> None:
     palette.setColor(QPalette.ColorRole.Highlight, QColor("#2563eb"))
     palette.setColor(QPalette.ColorRole.HighlightedText, QColor("#ffffff"))
     app.setPalette(palette)
-    app.setStyleSheet(APP_STYLESHEET)
+    app.setStyleSheet(stylesheet)
