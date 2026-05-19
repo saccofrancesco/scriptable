@@ -21,10 +21,31 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
+    QListView,
     QTimeEdit,
     QVBoxLayout,
     QWidget,
 )
+
+
+class EmployeeComboBox(QComboBox):
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setMaxVisibleItems(8)
+        self.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToContentsOnFirstShow
+        )
+        self.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.setDuplicatesEnabled(False)
+        self.setMinimumContentsLength(18)
+        self.setView(QListView(self))
+
+    def showPopup(self) -> None:
+        popup = self.view()
+        popup.setFixedWidth(self.width())
+        popup.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        popup.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        super().showPopup()
 
 
 class EmployeeDialog(QDialog):
@@ -217,7 +238,7 @@ class ShiftDialog(QDialog):
         form.setVerticalSpacing(12)
         form.setHorizontalSpacing(14)
 
-        self._employee_combo: QComboBox = QComboBox(self)
+        self._employee_combo: QComboBox = EmployeeComboBox(self)
         self._employee_combo.setMinimumWidth(220)
         for employee in employees:
             self._employee_combo.addItem(employee.full_name, employee.id)
