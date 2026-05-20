@@ -6,7 +6,7 @@ from PyQt6.QtCore import QTime, Qt
 from PyQt6.QtGui import QColor
 from ..domain.models import Employee, Shift
 from ..services.formatting import format_full_date_label
-from .widgets import CardFrame, ColorSwatch, WeekdaySelector
+from .widgets import CardFrame, ColorSwatch
 from PyQt6.QtWidgets import (
     QCheckBox,
     QColorDialog,
@@ -104,9 +104,6 @@ class EmployeeDialog(QDialog):
         lunch_hint.setWordWrap(True)
         lunch_layout.addWidget(lunch_hint)
 
-        self._weekday_selector: WeekdaySelector = WeekdaySelector(self)
-        self._weekday_selector.selection_changed.connect(self._on_selection_changed)
-
         self._color_hex: str = "#2563eb"
         color_row: QHBoxLayout = QHBoxLayout()
         color_row.setSpacing(10)
@@ -126,7 +123,6 @@ class EmployeeDialog(QDialog):
         form.addRow("Last name", self._last_name)
         form.addRow("Monthly target", self._monthly_target)
         form.addRow("Lunch break", lunch_box)
-        form.addRow("Working days", self._weekday_selector)
         form.addRow("Color", color_widget)
 
         button_box: QDialogButtonBox = QDialogButtonBox(
@@ -150,15 +146,11 @@ class EmployeeDialog(QDialog):
 
         if employee is not None:
             self.set_employee(employee)
-        else:
-            self._weekday_selector.set_selected_days((0, 1, 2, 3, 4))
-
     def set_employee(self, employee: Employee) -> None:
         self._first_name.setText(employee.first_name)
         self._last_name.setText(employee.last_name)
         self._monthly_target.setValue(employee.monthly_target_hours)
         self._lunch_break_hours.setValue(employee.lunch_break_hours)
-        self._weekday_selector.set_selected_days(employee.workdays)
         self._set_color(employee.color_hex)
 
     def _set_color(self, color_hex: str) -> None:
@@ -174,17 +166,12 @@ class EmployeeDialog(QDialog):
         if color.isValid():
             self._set_color(color.name())
 
-    def _on_selection_changed(self) -> None:
-        # No-op for now; the button state is validated on save.
-        pass
-
     def get_values(self) -> dict[str, object]:
         return {
             "first_name": self._first_name.text(),
             "last_name": self._last_name.text(),
             "monthly_target_hours": float(self._monthly_target.value()),
             "lunch_break_hours": float(self._lunch_break_hours.value()),
-            "workdays": self._weekday_selector.selected_days(),
             "color_hex": self._color_hex,
         }
 
@@ -194,9 +181,6 @@ class EmployeeDialog(QDialog):
             return
         if not self._last_name.text().strip():
             QMessageBox.warning(self, "Missing data", "Last name is required.")
-            return
-        if not self._weekday_selector.selected_days():
-            QMessageBox.warning(self, "Missing data", "Select at least one workday.")
             return
         super().accept()
 
