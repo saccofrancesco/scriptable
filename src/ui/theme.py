@@ -146,18 +146,6 @@ QPushButton#secondaryButton:hover {
     background: #f8fafc;
 }
 
-QToolButton#weekdayButton {
-    padding: 5px 8px;
-    border-radius: 999px;
-    min-width: 40px;
-}
-
-QToolButton#weekdayButton:checked {
-    background: #dbeafe;
-    border-color: #2563eb;
-    color: #1d4ed8;
-}
-
 QLineEdit,
 QDoubleSpinBox,
 QTimeEdit,
