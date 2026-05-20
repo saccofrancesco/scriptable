@@ -108,27 +108,16 @@ class WorkshiftController(QObject):
         first_name: str,
         last_name: str,
         monthly_target_hours: float,
-        workdays,
         color_hex: str,
         lunch_break_hours: float = 1.0,
     ) -> Employee:
-        (
-            first_name,
-            last_name,
-            monthly_target_hours,
-            workdays,
-        ) = validate_employee_fields(
-            first_name,
-            last_name,
-            monthly_target_hours,
-            workdays,
-            lunch_break_hours,
+        first_name, last_name, monthly_target_hours = validate_employee_fields(
+            first_name, last_name, monthly_target_hours, lunch_break_hours
         )
         employee: Employee = Employee(
             first_name=first_name,
             last_name=last_name,
             monthly_target_hours=monthly_target_hours,
-            workdays=workdays,
             color_hex=_normalize_color_hex(color_hex),
             lunch_break_hours=lunch_break_hours,
         )
@@ -142,27 +131,16 @@ class WorkshiftController(QObject):
         first_name: str,
         last_name: str,
         monthly_target_hours: float,
-        workdays,
         color_hex: str,
         lunch_break_hours: float = 1.0,
     ) -> Employee:
-        (
-            first_name,
-            last_name,
-            monthly_target_hours,
-            workdays,
-        ) = validate_employee_fields(
-            first_name,
-            last_name,
-            monthly_target_hours,
-            workdays,
-            lunch_break_hours,
+        first_name, last_name, monthly_target_hours = validate_employee_fields(
+            first_name, last_name, monthly_target_hours, lunch_break_hours
         )
         employee: Employee = require_employee(self.schedule, employee_id)
         employee.first_name = first_name
         employee.last_name = last_name
         employee.monthly_target_hours = monthly_target_hours
-        employee.workdays = workdays
         employee.color_hex = _normalize_color_hex(color_hex)
         employee.lunch_break_hours = lunch_break_hours
         self.changed.emit()
