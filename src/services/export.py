@@ -171,7 +171,7 @@ def _write_workload_sheet(sheet, schedule: Schedule, month_date: date) -> None:
     _format_sheet_title(
         sheet,
         f"Workload - {format_month_label(month_date)}",
-        "Target hours versus assigned hours",
+        "Monthly target hours versus assigned hours",
         5,
     )
     headers_row: int = 4
