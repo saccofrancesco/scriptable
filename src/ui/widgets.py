@@ -61,40 +61,6 @@ class ColorSwatch(QFrame):
         )
 
 
-class WeekdaySelector(QWidget):
-    def __init__(self, parent: QWidget | None = None) -> None:
-        super().__init__(parent)
-        layout: QHBoxLayout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(8)
-        self._buttons: list[QToolButton] = list()
-        for index in range(7):
-            button: QToolButton = QToolButton(self)
-            button.setCheckable(True)
-            button.setObjectName("weekdayButton")
-            button.setText(weekday_abbrev(index))
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.toggled.connect(self._emit_change)
-            layout.addWidget(button)
-            self._buttons.append(button)
-        self.set_selected_days((0, 1, 2, 3, 4))
-
-    def _emit_change(self) -> None:
-        self.selection_changed.emit()
-
-    selection_changed: pyqtSignal = pyqtSignal()
-
-    def selected_days(self) -> tuple[int, ...]:
-        return tuple(
-            index for index, button in enumerate(self._buttons) if button.isChecked()
-        )
-
-    def set_selected_days(self, days: tuple[int, ...] | list[int]) -> None:
-        normalized: set[int] = set(days)
-        for index, button in enumerate(self._buttons):
-            button.setChecked(index in normalized)
-
-
 class EmployeeRowWidget(CardFrame):
     edit_requested: pyqtSignal[str] = pyqtSignal(str)
     delete_requested: pyqtSignal[str] = pyqtSignal(str)
