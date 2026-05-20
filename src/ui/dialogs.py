@@ -78,11 +78,11 @@ class EmployeeDialog(QDialog):
 
         self._first_name: QLineEdit = QLineEdit(self)
         self._last_name: QLineEdit = QLineEdit(self)
-        self._weekly_target: QDoubleSpinBox = QDoubleSpinBox(self)
-        self._weekly_target.setRange(0.0, 200.0)
-        self._weekly_target.setDecimals(2)
-        self._weekly_target.setSingleStep(0.5)
-        self._weekly_target.setSuffix(" h")
+        self._monthly_target: QDoubleSpinBox = QDoubleSpinBox(self)
+        self._monthly_target.setRange(0.0, 2000.0)
+        self._monthly_target.setDecimals(2)
+        self._monthly_target.setSingleStep(1.0)
+        self._monthly_target.setSuffix(" h")
 
         self._lunch_break_hours: QDoubleSpinBox = QDoubleSpinBox(self)
         self._lunch_break_hours.setRange(0.0, 8.0)
@@ -124,7 +124,7 @@ class EmployeeDialog(QDialog):
 
         form.addRow("First name", self._first_name)
         form.addRow("Last name", self._last_name)
-        form.addRow("Weekly target", self._weekly_target)
+        form.addRow("Monthly target", self._monthly_target)
         form.addRow("Lunch break", lunch_box)
         form.addRow("Working days", self._weekday_selector)
         form.addRow("Color", color_widget)
@@ -156,7 +156,7 @@ class EmployeeDialog(QDialog):
     def set_employee(self, employee: Employee) -> None:
         self._first_name.setText(employee.first_name)
         self._last_name.setText(employee.last_name)
-        self._weekly_target.setValue(employee.weekly_target_hours)
+        self._monthly_target.setValue(employee.monthly_target_hours)
         self._lunch_break_hours.setValue(employee.lunch_break_hours)
         self._weekday_selector.set_selected_days(employee.workdays)
         self._set_color(employee.color_hex)
@@ -182,7 +182,7 @@ class EmployeeDialog(QDialog):
         return {
             "first_name": self._first_name.text(),
             "last_name": self._last_name.text(),
-            "weekly_target_hours": float(self._weekly_target.value()),
+            "monthly_target_hours": float(self._monthly_target.value()),
             "lunch_break_hours": float(self._lunch_break_hours.value()),
             "workdays": self._weekday_selector.selected_days(),
             "color_hex": self._color_hex,
