@@ -1,6 +1,5 @@
 from __future__ import annotations
 from calendar import monthrange
-from collections.abc import Iterable
 from datetime import date, datetime
 from ..domain.models import Employee, Schedule, Shift
 from .view_models import EmployeeListItemVM, EmployeeWorkloadVM, ShiftRowVM
@@ -31,7 +30,6 @@ def employee_display_rows(schedule: Schedule) -> list[EmployeeListItemVM]:
             color_hex=employee.color_hex,
             monthly_target_hours=employee.monthly_target_hours,
             lunch_break_hours=employee.lunch_break_hours,
-            workdays=employee.workdays,
         )
         for employee in schedule.employees
     ]
@@ -83,17 +81,6 @@ def build_daily_shift_rows(schedule: Schedule, selected_day: date) -> list[Shift
         if shift.shift_date == selected_day
     ]
     return sorted(rows, key=lambda row: (row.start_time, row.employee_name.casefold()))
-
-
-def workdays_in_month(month_date: date, workdays: Iterable[int]) -> int:
-    allowed: set[int] = set(workdays)
-    total_days: int = month_day_count(month_date)
-    count: int = 0
-    for day_number in range(1, total_days + 1):
-        current: date = month_date.replace(day=day_number)
-        if current.weekday() in allowed:
-            count += 1
-    return count
 
 
 def monthly_target_hours(employee: Employee, month_date: date) -> float:
