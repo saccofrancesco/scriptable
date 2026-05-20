@@ -10,7 +10,6 @@ class EmployeeListItemVM:
     color_hex: str
     monthly_target_hours: float
     lunch_break_hours: float
-    workdays: tuple[int, ...]
 
 
 @dataclass(frozen=True, slots=True)
