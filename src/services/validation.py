@@ -21,7 +21,7 @@ def normalize_workdays(workdays: Iterable[int]) -> tuple[int, ...]:
 def validate_employee_fields(
     first_name: str,
     last_name: str,
-    weekly_target_hours: float,
+    monthly_target_hours: float,
     workdays: Iterable[int],
     lunch_break_hours: float = 1.0,
 ) -> tuple[str, str, float, tuple[int, ...]]:
@@ -31,12 +31,12 @@ def validate_employee_fields(
         raise WorkshiftError("First name is required.")
     if not last_name:
         raise WorkshiftError("Last name is required.")
-    if weekly_target_hours < 0:
-        raise WorkshiftError("Weekly target hours cannot be negative.")
+    if monthly_target_hours < 0:
+        raise WorkshiftError("Monthly target hours cannot be negative.")
     if lunch_break_hours < 0:
         raise WorkshiftError("Lunch break hours cannot be negative.")
     normalized_workdays: tuple[int, ...] = normalize_workdays(workdays)
-    return first_name, last_name, weekly_target_hours, normalized_workdays
+    return first_name, last_name, monthly_target_hours, normalized_workdays
 
 
 def require_employee(schedule: Schedule, employee_id: str) -> Employee:
