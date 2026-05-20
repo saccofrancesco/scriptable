@@ -12,7 +12,7 @@ def _new_id() -> str:
 class Employee:
     first_name: str
     last_name: str
-    weekly_target_hours: float
+    monthly_target_hours: float
     workdays: tuple[int, ...]
     color_hex: str
     id: str = field(default_factory=_new_id)
