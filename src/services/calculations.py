@@ -29,7 +29,7 @@ def employee_display_rows(schedule: Schedule) -> list[EmployeeListItemVM]:
             id=employee.id,
             full_name=employee.full_name,
             color_hex=employee.color_hex,
-            weekly_target_hours=employee.weekly_target_hours,
+            monthly_target_hours=employee.monthly_target_hours,
             lunch_break_hours=employee.lunch_break_hours,
             workdays=employee.workdays,
         )
@@ -97,13 +97,7 @@ def workdays_in_month(month_date: date, workdays: Iterable[int]) -> int:
 
 
 def monthly_target_hours(employee: Employee, month_date: date) -> float:
-    if not employee.workdays:
-        return 0.0
-    workday_count: int = workdays_in_month(month_date, employee.workdays)
-    if workday_count == 0:
-        return 0.0
-    configured_days: int = len(employee.workdays)
-    return employee.weekly_target_hours / configured_days * workday_count
+    return max(employee.monthly_target_hours, 0.0)
 
 
 def assigned_hours_for_employee(
