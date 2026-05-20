@@ -119,7 +119,7 @@ class EmployeeRowWidget(CardFrame):
         self._meta_label = QLabel(
             " · ".join(
                 (
-                    f"{format_hours(employee.weekly_target_hours)} / week",
+                    f"{format_hours(employee.monthly_target_hours)} / month",
                     f"{format_hours(employee.lunch_break_hours)} lunch break",
                 )
             ),
