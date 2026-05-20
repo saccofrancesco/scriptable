@@ -13,7 +13,6 @@ class Employee:
     first_name: str
     last_name: str
     monthly_target_hours: float
-    workdays: tuple[int, ...]
     color_hex: str
     id: str = field(default_factory=_new_id)
     lunch_break_hours: float = 1.0
